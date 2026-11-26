@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Proposal | Stadium Market Shop &amp; Tenant Management System</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- html2pdf.js CDN for 1-click PDF download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Custom Project CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+    }
+
+    .slide-card {
+      width: 100%;
+      max-width: 1120px;
+      min-height: 630px;
+      margin: 0 auto;
+      border-radius: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Slide-by-slide mode hides non-active slides */
+    body.mode-single .slide-card {
+      display: none;
+    }
+    body.mode-single .slide-card.active-slide {
+      display: flex;
+      flex-direction: column;
+      animation: slideFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* All-slides scroll mode shows all slides stacked */
+    body.mode-all .slide-card {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 2rem;
+    }
+
+    /* PDF Export temporary mode (clean A4 landscape pages) */
+    body.exporting-pdf {
+      background: #ffffff !important;
+    }
+    body.exporting-pdf #presentationDeck {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 1060px !important;
+    }
+    body.exporting-pdf .slide-card {
+      display: flex !important;
+      flex-direction: column !important;
+      width: 1060px !important;
+      max-width: 1060px !important;
+      height: 720px !important;
+      min-height: 720px !important;
+      max-height: 720px !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      page-break-after: always;
+      break-after: page;
+    }
+    body.exporting-pdf .slide-card:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.992);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Native Browser Print -> Vector PDF */
+    @page {
+      size: A4 landscape;
+      margin: 6mm;
+    }
+
+    @media print {
+      html, body {
+        background: #ffffff !important;
+        height: auto !important;
+        overflow: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body * {
+        visibility: visible !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      #slideOverviewDrawer, #toastContainer {
+        display: none !important;
+      }
+      #mainViewport {
+        padding: 0 !important;
+        overflow: visible !important;
+        height: auto !important;
+        display: block !important;
+      }
+      #presentationDeck {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+      }
+      .slide-card {
+        display: flex !important;
+        flex-direction: column !important;
+        position: relative !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 185mm !important;
+        height: 185mm !important;
+        margin: 0 !important;
+        border-radius: 12px !important;
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .slide-card:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+    }
+  </style>
+</head>
+<body class="mode-single text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Top Sticky Presentation Control Bar -->
+  <header class="no-print sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 text-white px-3 sm:px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Proposal Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 shrink-0">
+          <i class="fa-solid fa-building-shield text-sm"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm sm:text-base font-bold leading-tight text-white">Stadium Market — Client Project Proposal</h1>
+            <span class="hidden md:inline-block text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">Proposal Deck</span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden sm:block">Shop &amp; Tenant E-Management System Proposal (10 Slides)</p>
+        </div>
+      </div>
+
+      <!-- Center Slide Controls -->
+      <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-xl px-2 py-1">
+        <button onclick="prevSlide()" id="prevSlideBtn" class="p-1.5 px-2.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-30 transition text-xs font-semibold" title="Previous Slide (Left Arrow)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <select id="slideSelector" onchange="goToSlide(parseInt(this.value))" class="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer px-1">
+          <option value="1" class="bg-slate-900">1. Proposal Cover &amp; Vision</option>
+          <option value="2" class="bg-slate-900">2. Executive Summary &amp; Pain Points</option>
+          <option value="3" class="bg-slate-900">3. Capabilities: Operations &amp; Portfolio</option>
+          <option value="4" class="bg-slate-900">4. Capabilities: Billing, Leases &amp; Support</option>
+          <option value="5" class="bg-slate-900">5. Governance, Roles &amp; Security</option>
+          <option value="6" class="bg-slate-900">6. Business Impact &amp; Revenue ROI</option>
+          <option value="7" class="bg-slate-900">7. Scope of Deliverables (Phase 1 &amp; 2)</option>
+          <option value="8" class="bg-slate-900">8. Implementation Roadmap (6 Weeks)</option>
+          <option value="9" class="bg-slate-900">9. Engagement Packages &amp; SLA</option>
+          <option value="10" class="bg-slate-900">10. Why Us &amp; Next Steps</option>
+        </select>
+
+        <span id="slideCounterBadge" class="text-[11px] font-mono bg-slate-800 text-blue-300 px-2 py-0.5 rounded-md">1/10</span>
+
+        <button onclick="nextSlide()" id="nextSlideBtn" class="p-1.5 px-2.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-30 transition text-xs font-semibold" title="Next Slide (Right Arrow)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Right Action Buttons -->
+      <div class="flex items-center gap-2">
+        <!-- View Toggle -->
+        <div class="hidden lg:inline-flex bg-slate-900 border border-slate-800 rounded-xl p-0.5 text-xs">
+          <button id="btnModeSingle" onclick="setViewMode('single')" class="px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold transition">
+            <i class="fa-solid fa-display mr-1"></i>Slides
+          </button>
+          <button id="btnModeAll" onclick="setViewMode('all')" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white font-semibold transition">
+            <i class="fa-solid fa-layer-group mr-1"></i>All Slides
+          </button>
+        </div>
+
+        <!-- Overview Drawer Button -->
+        <button onclick="toggleOverviewDrawer()" class="p-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition" title="Slide Index">
+          <i class="fa-solid fa-table-cells-large"></i>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button onclick="toggleFullscreen()" class="hidden sm:inline-flex p-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition" title="Fullscreen Presentation (F)">
+          <i class="fa-solid fa-expand"></i>
+        </button>
+
+        <!-- Direct PDF Download Button -->
+        <button id="downloadPdfBtn" onclick="downloadPresentationPDF()" class="flex items-center gap-1.5 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-rose-600/25 transition">
+          <i class="fa-solid fa-file-pdf"></i>
+          <span>Download PDF</span>
+        </button>
+
+        <!-- Vector Print / Save PDF Button -->
+        <button onclick="printVectorPDF()" class="hidden sm:flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition" title="Print or Save Vector PDF via Browser">
+          <i class="fa-solid fa-print text-emerald-400"></i>
+          <span>Print</span>
+        </button>
+
+        <!-- Open Interactive Prototype -->
+        <a href="index.html" class="hidden xl:flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-2 rounded-xl transition">
+          <i class="fa-solid fa-desktop"></i>
+          <span>Live Prototype</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Top Progress Bar -->
+    <div class="w-full h-1 bg-slate-800 mt-2.5 rounded-full overflow-hidden">
+      <div id="presentationProgress" class="h-full bg-gradient-to-r from-blue-500 via-indigo-400 to-emerald-400 transition-all duration-300" style="width: 10%;"></div>
+    </div>
+  </header>
+
+  <!-- Quick Slide Index Drawer -->
+  <div id="slideOverviewDrawer" class="no-print hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md p-6 overflow-y-auto">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-6 text-white">
+        <div>
+          <h2 class="text-lg font-bold">Proposal Section Index</h2>
+          <p class="text-xs text-slate-400">Select any slide to jump directly to that section</p>
+        </div>
+        <button onclick="toggleOverviewDrawer()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold">
+          <i class="fa-solid fa-xmark mr-1"></i> Close
+        </button>
+      </div>
+      <div id="slideThumbGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+  </div>
+
+  <!-- Main Presentation Stage -->
+  <main id="mainViewport" class="flex-1 p-3 sm:p-6 lg:p-8 flex flex-col items-center justify-start">
+    <div id="presentationDeck" class="w-full max-w-[1120px]">
+
+      <!-- =========================================================
+           SLIDE 1: PROPOSAL COVER SLIDE
+      ========================================================== -->
+      <section class="slide-card active-slide bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-8 sm:p-12 justify-between border border-blue-800/40" data-slide="1" data-title="Proposal Cover &amp; Vision">
+        <!-- Decorative Background Shapes -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Top Metadata Row -->
+        <div class="relative z-10 flex flex-wrap items-center justify-between gap-3">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Digital Transformation Project Proposal
+          </div>
+          <div class="text-xs font-mono text-slate-300 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
+            Ref: PROP-SM-2026 • November 2026
+          </div>
+        </div>
+
+        <!-- Center Hero -->
+        <div class="relative z-10 my-auto py-6">
+          <div class="flex items-center gap-4 mb-5">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-3xl sm:text-4xl shadow-2xl shadow-blue-500/30 border border-blue-300/30 shrink-0">
+              <i class="fa-solid fa-shop"></i>
+            </div>
+            <div>
+              <p class="text-xs sm:text-sm font-bold uppercase tracking-widest text-blue-300">Prepared For: National Stadium Market Authority &amp; Estate Division</p>
+              <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight mt-1">
+                Stadium Market Shop &amp; Tenant E-Management Portal
+              </h2>
+            </div>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-300 max-w-3xl leading-relaxed mb-8">
+            A unified, transparent, and audit-ready management platform designed to digitize all <strong class="text-white">100 commercial shops</strong> across Blocks A, B, C, and D—automating monthly rent &amp; utility billing, centralizing tenant KYC compliance, preventing missed lease renewals, and maximizing estate revenue.
+          </p>
+
+          <!-- Value Highlights -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+              <p class="text-[11px] text-blue-200 font-semibold">Centralized Portfolio</p>
+              <p class="text-2xl font-black text-white mt-1">100 Shops</p>
+              <p class="text-[11px] text-emerald-300 mt-0.5">4 Commercial Blocks</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+              <p class="text-[11px] text-blue-200 font-semibold">Revenue Automation</p>
+              <p class="text-2xl font-black text-white mt-1">1-Click Billing</p>
+              <p class="text-[11px] text-slate-300 mt-0.5">Rent + Utilities + Receipts</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+              <p class="text-[11px] text-blue-200 font-semibold">Compliance Protection</p>
+              <p class="text-2xl font-black text-white mt-1">15/30-Day Alerts</p>
+              <p class="text-[11px] text-amber-300 mt-0.5">Leases &amp; KYC Tracking</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+              <p class="text-[11px] text-blue-200 font-semibold">Delivery Timeline</p>
+              <p class="text-2xl font-black text-white mt-1">6 Weeks</p>
+              <p class="text-[11px] text-emerald-300 mt-0.5">Turnkey Go-Live</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="relative z-10 pt-5 border-t border-white/15 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-handshake text-blue-400"></i>
+            <span>Confidential Client Proposal • Validity: 30 Days</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i>Role-Based Governance</span>
+            <span><i class="fa-solid fa-chart-line text-blue-400 mr-1"></i>Executive Analytics</span>
+            <span class="font-bold text-white bg-white/10 px-2.5 py-1 rounded-lg">Slide 01 / 10</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 2: EXECUTIVE SUMMARY & PAIN POINTS
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="2" data-title="Executive Summary &amp; Pain Points">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 02 • Executive Summary</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Current Operational Challenges &amp; Our Proposed Solution</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">02 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-auto py-4">
+          <!-- Left: Current Pain Points -->
+          <div class="bg-rose-50/70 border border-rose-200/80 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center gap-2.5 text-rose-700 font-bold text-base">
+              <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <span>Key Operational Pain Points</span>
+            </div>
+            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-rose-100">
+                <i class="fa-solid fa-xmark text-rose-500 mt-0.5"></i>
+                <div><strong>Fragmented Shop Visibility:</strong> Difficult to track real-time occupancy, vacant units, and shops under repair across Blocks A, B, C, and D.</div>
+              </li>
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-rose-100">
+                <i class="fa-solid fa-xmark text-rose-500 mt-0.5"></i>
+                <div><strong>Slow Manual Billing &amp; Reconciliation:</strong> Combining base rent with electricity, water, and service charges manually delays collection and receipting.</div>
+              </li>
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-rose-100">
+                <i class="fa-solid fa-xmark text-rose-500 mt-0.5"></i>
+                <div><strong>Lease Expiry &amp; Sub-Letting Risks:</strong> Lack of automated expiry alerts and digital allocation history leads to delayed renewals and compliance gaps.</div>
+              </li>
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-rose-100">
+                <i class="fa-solid fa-xmark text-rose-500 mt-0.5"></i>
+                <div><strong>Unstructured Maintenance &amp; Notices:</strong> Match-day closures and urgent shutter/electrical repair complaints lack centralized accountability.</div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Right: Proposed Business Transformation -->
+          <div class="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center gap-2.5 text-emerald-700 font-bold text-base">
+              <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <span>Strategic Value of the Proposed Portal</span>
+            </div>
+            <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-emerald-100">
+                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                <div><strong>Single Source of Truth:</strong> Executive dashboard and interactive 100-shop floor grid give instant clarity on occupancy and revenue health.</div>
+              </li>
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-emerald-100">
+                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                <div><strong>Automated Invoicing &amp; Official Receipts:</strong> Generate monthly invoices in seconds, track bKash/Bank/Cash payments, and print tamper-proof receipts.</div>
+              </li>
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-emerald-100">
+                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                <div><strong>Proactive Lease &amp; KYC Control:</strong> Automated 15 &amp; 30-day renewal alerts, verified NID/Trade License records, and refundable trust fund oversight.</div>
+              </li>
+              <li class="flex items-start gap-2.5 bg-white p-3 rounded-xl border border-emerald-100">
+                <i class="fa-solid fa-check text-emerald-600 mt-0.5"></i>
+                <div><strong>Data-Driven Revenue Growth:</strong> Vacancy loss analytics pinpoint underperforming blocks and recommend pricing strategies to recover lost rent.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Business Goal: Eliminate manual leakage, accelerate cash flow, and achieve 100% audit readiness</span>
+          <span class="font-semibold text-blue-600">Executive Proposal</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 3: CAPABILITIES PART 1 (OPERATIONS & PORTFOLIO)
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="3" data-title="Capabilities: Operations &amp; Portfolio">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Slide 03 • Proposed Solution (Part 1)</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Executive Command Center, 100-Shop Grid &amp; Tenant KYC</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">03 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 my-auto py-3">
+          <!-- Left: 3 Core Operational Pillars -->
+          <div class="lg:col-span-7 space-y-3 text-xs">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div class="flex items-center gap-2.5 mb-1.5">
+                <span class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center"><i class="fa-solid fa-chart-pie"></i></span>
+                <h3 class="text-sm font-bold text-slate-900">1. Real-Time Executive Dashboard</h3>
+              </div>
+              <p class="text-slate-600 leading-relaxed">At-a-glance visibility into occupancy rates (82% occupied, 12 vacant, 6 under repair), monthly collection vs. target progress, top overdue defaulters, urgent maintenance requests, and recent transactions.</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div class="flex items-center gap-2.5 mb-1.5">
+                <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center"><i class="fa-solid fa-border-all"></i></span>
+                <h3 class="text-sm font-bold text-slate-900">2. Visual 100-Shop Directory &amp; Rent Configurator</h3>
+              </div>
+              <p class="text-slate-600 leading-relaxed">Manage all 100 units across Block A (Ground), Block B (1st Floor), Block C (South Gallery), and Block D (VIP Gate). Switch seamlessly between detailed searchable tables and a color-coded visual floor map to configure base rent and utility charges.</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <div class="flex items-center gap-2.5 mb-1.5">
+                <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center"><i class="fa-solid fa-id-card"></i></span>
+                <h3 class="text-sm font-bold text-slate-900">3. Digital Tenant KYC &amp; Allocation History</h3>
+              </div>
+              <p class="text-slate-600 leading-relaxed">Centralize verified National ID (NID), Trade License, guarantor contacts, and security deposits. Maintain an immutable chronological timeline of past and current shop allocations to prevent unauthorized transfers.</p>
+            </div>
+          </div>
+
+          <!-- Right: Live Visual Previews (Occupancy Chart + Mini Grid) -->
+          <div class="lg:col-span-5 space-y-3">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <h3 class="text-xs font-bold text-slate-800 mb-1">Live Portfolio Snapshot (100 Shops)</h3>
+              <div class="h-36 flex items-center justify-center">
+                <canvas id="presOccupancyChart"></canvas>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 text-white rounded-2xl p-4">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-xs font-bold">Visual Shop Grid Preview (Blocks A–D)</h3>
+                <span class="text-[10px] text-emerald-300 font-semibold">100 Units Mapped</span>
+              </div>
+              <div id="miniShopGridPreview" class="grid grid-cols-10 gap-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Designed for instant clarity by Estate Officers, Management Committees, and Auditors</span>
+          <span class="font-semibold text-emerald-600">Full Inventory &amp; KYC Control</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 4: CAPABILITIES PART 2 (BILLING, LEASES & SUPPORT)
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="4" data-title="Capabilities: Billing, Leases &amp; Support">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Slide 04 • Proposed Solution (Part 2)</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Automated Billing, Lease Governance &amp; Tenant Communication</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">04 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto py-4 text-xs">
+          <!-- Pillar 4: Billing & Receipts -->
+          <div class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 flex flex-col justify-between space-y-3">
+            <div class="space-y-2.5">
+              <div class="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg shadow-md shadow-emerald-600/20">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900">Automated Billing &amp; Official Receipts</h3>
+              <p class="text-slate-600 leading-relaxed">Streamline the entire monthly revenue cycle from invoice creation to collection reconciliation.</p>
+              <ul class="space-y-1.5 text-slate-700 pt-1">
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>1-Click batch monthly invoicing</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>Electricity, water &amp; service charge add-ons</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>bKash, Nagad, Bank &amp; Cash tracking</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>Paid / Partial / Unpaid status filters</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>Print-ready Official Money Receipts</li>
+              </ul>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white border border-emerald-100 text-[11px] font-semibold text-emerald-800">
+              Eliminates manual calculation errors &amp; disputes
+            </div>
+          </div>
+
+          <!-- Pillar 5: Lease Lifecycle -->
+          <div class="rounded-2xl border border-rose-200 bg-rose-50/40 p-5 flex flex-col justify-between space-y-3">
+            <div class="space-y-2.5">
+              <div class="w-11 h-11 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg shadow-md shadow-rose-600/20">
+                <i class="fa-solid fa-file-contract"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900">Lease Tracking &amp; Deposit Trust Fund</h3>
+              <p class="text-slate-600 leading-relaxed">Protect long-term contract compliance and safeguard tenant security deposits.</p>
+              <ul class="space-y-1.5 text-slate-700 pt-1">
+                <li><i class="fa-solid fa-check text-rose-600 mr-1.5"></i>15-day &amp; 30-day expiry countdown alerts</li>
+                <li><i class="fa-solid fa-check text-rose-600 mr-1.5"></i>Bulk SMS renewal reminder dispatch</li>
+                <li><i class="fa-solid fa-check text-rose-600 mr-1.5"></i>Guided lease renewal with annual % increment</li>
+                <li><i class="fa-solid fa-check text-rose-600 mr-1.5"></i>Digital contract terms &amp; clause viewer</li>
+                <li><i class="fa-solid fa-check text-rose-600 mr-1.5"></i>Refundable Security Trust Fund ledger</li>
+              </ul>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white border border-rose-100 text-[11px] font-semibold text-rose-800">
+              Ensures zero missed renewals &amp; accurate escalations
+            </div>
+          </div>
+
+          <!-- Pillar 6: Notices & Maintenance -->
+          <div class="rounded-2xl border border-blue-200 bg-blue-50/40 p-5 flex flex-col justify-between space-y-3">
+            <div class="space-y-2.5">
+              <div class="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg shadow-md shadow-blue-600/20">
+                <i class="fa-solid fa-bullhorn"></i>
+              </div>
+              <h3 class="text-base font-bold text-slate-900">Broadcast Notices &amp; Maintenance</h3>
+              <p class="text-slate-600 leading-relaxed">Unify stadium-wide tenant communication and facility repair accountability.</p>
+              <ul class="space-y-1.5 text-slate-700 pt-1">
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Targeted SMS/portal notices by block or all shops</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Match-day VIP gate &amp; security closure alerts</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Delivery confirmation logs (e.g., 82/82 delivered)</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Priority repair tickets (Shutter, Electrical, Water)</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Technician assignment &amp; resolution sign-off</li>
+              </ul>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white border border-blue-100 text-[11px] font-semibold text-blue-800">
+              Faster maintenance SLA &amp; seamless match-day ops
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>End-to-end operational coverage tailored specifically for Stadium Market workflows</span>
+          <span class="font-semibold text-indigo-600">Unified Revenue &amp; Facility Suite</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 5: GOVERNANCE, ROLES & SECURITY
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="5" data-title="Governance, Roles &amp; Security">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 05 • Governance &amp; Security</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Role-Based Access Control &amp; Institutional Accountability</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">05 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-4">
+          <!-- 4 Governance Roles -->
+          <div class="lg:col-span-7 space-y-3">
+            <h3 class="text-sm font-bold text-slate-800">4 Segregated Authority Roles</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="font-bold text-blue-900">Super Administrator</span>
+                  <i class="fa-solid fa-crown text-blue-600"></i>
+                </div>
+                <p class="text-slate-600">Complete oversight of system configuration, user permissions, approvals, and full estate reporting.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-indigo-50 border border-indigo-200">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="font-bold text-indigo-900">Estate Officer</span>
+                  <i class="fa-solid fa-user-tie text-indigo-600"></i>
+                </div>
+                <p class="text-slate-600">Manages shop allocation, rent rates, KYC verification, lease renewals, notices, and maintenance tracking.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="font-bold text-emerald-900">Accounts Manager / Cashier</span>
+                  <i class="fa-solid fa-cash-register text-emerald-600"></i>
+                </div>
+                <p class="text-slate-600">Handles monthly batch invoicing, utility charge posting, payment collection, and official receipt issuance.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-100 border border-slate-200">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="font-bold text-slate-900">Government Auditor (Read-Only)</span>
+                  <i class="fa-solid fa-magnifying-glass-chart text-slate-600"></i>
+                </div>
+                <p class="text-slate-600">Restricted read-only access to verify revenue audits, arrears, security trust funds, and vacancy reports.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security & Compliance Safeguards -->
+          <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-blue-950 text-white rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-blue-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved"></i> Enterprise Security Safeguards
+              </h3>
+              <div class="space-y-3 text-xs">
+                <div class="p-3 rounded-xl bg-white/10 border border-white/15 flex items-start gap-3">
+                  <i class="fa-solid fa-lock text-emerald-400 mt-0.5"></i>
+                  <div>
+                    <p class="font-bold">Encrypted Access &amp; OTP Recovery</p>
+                    <p class="text-slate-300 text-[11px]">256-bit SSL transport security, protected login portal, and OTP-based institutional password recovery.</p>
+                  </div>
+                </div>
+                <div class="p-3 rounded-xl bg-white/10 border border-white/15 flex items-start gap-3">
+                  <i class="fa-solid fa-user-check text-blue-400 mt-0.5"></i>
+                  <div>
+                    <p class="font-bold">Segregation of Duties</p>
+                    <p class="text-slate-300 text-[11px]">Separates shop allocation from cash collection and independent audit review to prevent unauthorized edits.</p>
+                  </div>
+                </div>
+                <div class="p-3 rounded-xl bg-white/10 border border-white/15 flex items-start gap-3">
+                  <i class="fa-solid fa-clock-rotate-left text-amber-400 mt-0.5"></i>
+                  <div>
+                    <p class="font-bold">Session Hygiene &amp; Audit Trails</p>
+                    <p class="text-slate-300 text-[11px]">Safe session termination on sign-out and traceable timestamps for every invoice, receipt, and lease update.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-white/15 text-[11px] text-slate-300 flex justify-between">
+              <span>Compliance Ready</span>
+              <span class="text-emerald-300 font-semibold">Audit-Grade Controls</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Supports multi-officer teams without sacrificing financial governance</span>
+          <span class="font-semibold text-blue-600">Zero Unauthorized Access</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 6: BUSINESS IMPACT & REVENUE ROI
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="6" data-title="Business Impact &amp; Revenue ROI">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Slide 06 • Measurable Business Impact</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Financial Transparency, Arrears Recovery &amp; Vacancy Optimization</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">06 / 10</span>
+        </div>
+
+        <div class="my-auto py-3 space-y-4">
+          <!-- Portfolio Benchmark KPIs -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+              <p class="text-slate-500 font-semibold">Annual Billed Portfolio</p>
+              <p class="text-xl font-black text-slate-900 mt-0.5">৳18.72 Million</p>
+              <p class="text-[10px] text-slate-400">Base Rent + Utility Charges</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <p class="text-emerald-700 font-semibold">Trust Deposit Oversight</p>
+              <p class="text-xl font-black text-emerald-700 mt-0.5">৳4.56 Million</p>
+              <p class="text-[10px] text-emerald-700">82 Active Security Deposits</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200">
+              <p class="text-rose-700 font-semibold">Identified Vacancy Loss</p>
+              <p class="text-xl font-black text-rose-700 mt-0.5">৳1.33 Million</p>
+              <p class="text-[10px] text-rose-600">Across 74 Vacant Shop-Months</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-blue-50 border border-blue-200">
+              <p class="text-blue-700 font-semibold">Projected Uplift (Block C)</p>
+              <p class="text-xl font-black text-blue-700 mt-0.5">+৳400,000 / yr</p>
+              <p class="text-[10px] text-blue-600">Via 10% Strategic Pricing Adjustment</p>
+            </div>
+          </div>
+
+          <!-- Dual Charts -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div class="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <h3 class="text-xs font-bold text-slate-800 mb-2">Monthly Collection vs. Arrears Trend (Jun–Nov 2026)</h3>
+              <div class="h-44">
+                <canvas id="presFinancialChart"></canvas>
+              </div>
+            </div>
+            <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <h3 class="text-xs font-bold text-slate-800 mb-2">Block-Wise Occupancy &amp; Vacancy Breakdown</h3>
+              <div class="h-44">
+                <canvas id="presVacancyChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 flex flex-wrap items-center justify-between gap-2 text-xs text-blue-950">
+            <span><i class="fa-solid fa-lightbulb text-amber-500 mr-1.5"></i><strong>Executive Insight:</strong> Built-in root-cause analytics uncover why units remain vacant (45% rear visibility, 25% pricing, 18% repair, 12% tender delay) so management can act immediately.</span>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Includes 1-click Spreadsheet (.CSV) and Print/PDF Audit Reports for committee meetings</span>
+          <span class="font-semibold text-emerald-600">Measurable Financial ROI</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 7: SCOPE OF DELIVERABLES (PHASE 1 & PHASE 2)
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="7" data-title="Scope of Deliverables (Phase 1 &amp; 2)">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Slide 07 • Project Deliverables</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Clear Phased Scope — Prototype Ready &amp; Production Go-Live</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">07 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-auto py-4 text-xs">
+          <!-- Phase 1 -->
+          <div class="rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/40 p-6 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-3 py-1 rounded-full bg-emerald-600 text-white font-bold text-[11px]">Phase 1 • Completed Prototype</span>
+                <span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>Ready for Review</span>
+              </div>
+              <h3 class="text-lg font-black text-slate-900 mb-2">Complete Interactive Admin Portal UI/UX</h3>
+              <p class="text-slate-600 mb-4">Fully designed, mobile-responsive interface covering every administrative workflow for immediate stakeholder validation:</p>
+              <ul class="space-y-2 text-slate-700">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Role-based Login &amp; Secure Logout experience</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Live Executive Dashboard with interactive charts &amp; alerts</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> 100-Shop Directory, 4-Block Visual Map &amp; Rent Configurator</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Tenant KYC Verification &amp; Allocation History Timeline</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Batch Invoicing, Utility Billing &amp; Printable Money Receipts</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Lease Expiry Alerts, Broadcast Notices, Maintenance &amp; Reports</li>
+              </ul>
+            </div>
+            <div class="p-3 rounded-xl bg-white border border-emerald-200 text-emerald-800 font-semibold">
+              Supports Bengali &amp; English workflows with zero learning curve
+            </div>
+          </div>
+
+          <!-- Phase 2 -->
+          <div class="rounded-2xl border-2 border-blue-600/30 bg-blue-50/40 p-6 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-3 py-1 rounded-full bg-blue-600 text-white font-bold text-[11px]">Phase 2 • Production Integration</span>
+                <span class="text-blue-700 font-bold"><i class="fa-solid fa-rocket mr-1"></i>6-Week Rollout</span>
+              </div>
+              <h3 class="text-lg font-black text-slate-900 mb-2">Live Backend, Payment &amp; SMS Automation</h3>
+              <p class="text-slate-600 mb-4">Full-scale enterprise deployment connecting the portal to live databases, payment providers, and automated messaging:</p>
+              <ul class="space-y-2 text-slate-700">
+                <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-blue-600"></i> Secure Cloud or On-Premise Server &amp; Relational Database</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-blue-600"></i> Live bKash, Nagad &amp; SSLCommerz Payment Gateway Webhooks</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-blue-600"></i> Automated SMS Gateway for rent dues, receipts &amp; lease alerts</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-blue-600"></i> Digital KYC document upload &amp; secure cloud file storage</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-blue-600"></i> Data migration of all 100 shops, tenants &amp; active leases</li>
+                <li class="flex items-center gap-2"><i class="fa-solid fa-arrow-right text-blue-600"></i> Optional Tenant Self-Service Portal for online rent &amp; tickets</li>
+              </ul>
+            </div>
+            <div class="p-3 rounded-xl bg-white border border-blue-200 text-blue-800 font-semibold">
+              Includes full staff onboarding, documentation &amp; SLA support
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Phase 1 allows your committee to test and sign off on every screen before backend development begins</span>
+          <span class="font-semibold text-blue-600">Low-Risk Phased Delivery</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 8: IMPLEMENTATION TIMELINE (6 WEEKS)
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="8" data-title="Implementation Roadmap (6 Weeks)">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 08 • Delivery Schedule</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">6-Week Implementation &amp; Go-Live Roadmap</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">08 / 10</span>
+        </div>
+
+        <div class="my-auto py-4 space-y-5">
+          <!-- 5-Step Visual Timeline -->
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-xs">
+            <div class="p-4 rounded-2xl bg-slate-900 text-white flex flex-col justify-between">
+              <div>
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-500 text-white font-bold text-[10px] mb-2">Week 1</span>
+                <h3 class="font-bold text-sm mb-1.5">Discovery &amp; Data Prep</h3>
+                <p class="text-slate-300 leading-relaxed">Finalize business rules, collect 100-shop roster, tenant KYC records, and active lease schedules.</p>
+              </div>
+              <p class="mt-3 pt-2 border-t border-slate-700 text-[10px] text-blue-300 font-semibold">Milestone: Scope Sign-off</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200 flex flex-col justify-between">
+              <div>
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-600 text-white font-bold text-[10px] mb-2">Week 2–3</span>
+                <h3 class="font-bold text-sm text-slate-900 mb-1.5">Core Backend &amp; DB</h3>
+                <p class="text-slate-600 leading-relaxed">Build secure database, role permissions, automated monthly billing engine, and receipt archiving.</p>
+              </div>
+              <p class="mt-3 pt-2 border-t border-blue-200 text-[10px] text-blue-700 font-semibold">Milestone: Staging Demo</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-indigo-50 border border-indigo-200 flex flex-col justify-between">
+              <div>
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-indigo-600 text-white font-bold text-[10px] mb-2">Week 4</span>
+                <h3 class="font-bold text-sm text-slate-900 mb-1.5">Gateways &amp; Alerts</h3>
+                <p class="text-slate-600 leading-relaxed">Integrate bKash/SSLCommerz payments, SMS broadcast &amp; 15/30-day lease alert triggers.</p>
+              </div>
+              <p class="mt-3 pt-2 border-t border-indigo-200 text-[10px] text-indigo-700 font-semibold">Milestone: API Testing</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col justify-between">
+              <div>
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-600 text-white font-bold text-[10px] mb-2">Week 5</span>
+                <h3 class="font-bold text-sm text-slate-900 mb-1.5">UAT &amp; Staff Training</h3>
+                <p class="text-slate-600 leading-relaxed">Hands-on User Acceptance Testing with Estate Officers &amp; Accounts team plus training manuals.</p>
+              </div>
+              <p class="mt-3 pt-2 border-t border-amber-200 text-[10px] text-amber-800 font-semibold">Milestone: UAT Approval</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col justify-between">
+              <div>
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-bold text-[10px] mb-2">Week 6</span>
+                <h3 class="font-bold text-sm text-slate-900 mb-1.5">Go-Live &amp; Support</h3>
+                <p class="text-slate-600 leading-relaxed">Production launch, historical balance verification, and dedicated first-month hypercare.</p>
+              </div>
+              <p class="mt-3 pt-2 border-t border-emerald-200 text-[10px] text-emerald-700 font-semibold">Milestone: Live Handover</p>
+            </div>
+          </div>
+
+          <!-- Client Responsibilities -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-folder-open text-blue-600 text-base mt-0.5"></i>
+              <div>
+                <p class="font-bold text-slate-800">1. Master Shop &amp; Tenant Data</p>
+                <p class="text-slate-500">Provide current shop list, tenant NIDs, and lease expiry dates in Week 1.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-key text-indigo-600 text-base mt-0.5"></i>
+              <div>
+                <p class="font-bold text-slate-800">2. Merchant &amp; SMS Accounts</p>
+                <p class="text-slate-500">Confirm official bKash/Bank merchant credentials and SMS sender ID.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <i class="fa-solid fa-users-gear text-emerald-600 text-base mt-0.5"></i>
+              <div>
+                <p class="font-bold text-slate-800">3. Designated Focal Officer</p>
+                <p class="text-slate-500">Assign an Estate Officer for weekly reviews and UAT sign-off.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Rapid 6-week turnaround made possible because Phase 1 UI/UX is already built and ready</span>
+          <span class="font-semibold text-blue-600">Predictable Milestones</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 9: ENGAGEMENT PACKAGES & SLA
+      ========================================================== -->
+      <section class="slide-card bg-white text-slate-800 p-8 sm:p-10 justify-between border border-slate-200" data-slide="9" data-title="Engagement Packages &amp; SLA">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Slide 09 • Commercial Structure</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">Proposed Engagement Options &amp; Service Level Agreement</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">09 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 my-auto py-4 text-xs">
+          <!-- Option 1 -->
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Option A • Core Foundation</span>
+              <h3 class="text-lg font-black text-slate-900 mt-1">Core Admin Portal</h3>
+              <p class="text-slate-500 mt-1 mb-4">Ideal for digitized internal estate management, billing, and audit reporting.</p>
+              <ul class="space-y-2 text-slate-700">
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>All 8 Core Admin Modules</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>4-Role Access Control &amp; Security</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>100-Shop Grid &amp; Lease Tracker</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>Printable Money Receipts &amp; CSV/PDF</li>
+                <li><i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>Data Migration &amp; Staff Training</li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-200">
+              <p class="text-[11px] text-slate-500">Delivery: <strong>4 Weeks</strong> • Custom Quote</p>
+            </div>
+          </div>
+
+          <!-- Option 2 (Recommended) -->
+          <div class="rounded-2xl border-2 border-blue-600 bg-blue-50/50 p-5 flex flex-col justify-between relative shadow-md">
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-blue-600 text-white font-bold text-[10px] mb-1">Recommended • Full Automation</span>
+              <h3 class="text-lg font-black text-slate-900">Enterprise Smart Market Suite</h3>
+              <p class="text-slate-600 mt-1 mb-4">Complete hands-free revenue collection, automated alerts, and tenant self-service.</p>
+              <ul class="space-y-2 text-slate-800 font-medium">
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Everything in Core Admin Portal</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Live bKash / Nagad / SSLCommerz API</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Automated Bulk SMS Gateway Alerts</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Tenant Self-Service Web Portal</li>
+                <li><i class="fa-solid fa-check text-blue-600 mr-1.5"></i>Cloud Hosting &amp; Daily Backups Setup</li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-blue-200">
+              <p class="text-[11px] text-blue-900">Delivery: <strong>6 Weeks</strong> • Custom Quote</p>
+            </div>
+          </div>
+
+          <!-- Ongoing SLA -->
+          <div class="rounded-2xl border border-slate-200 bg-slate-900 text-white p-5 flex flex-col justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Post-Launch Care</span>
+              <h3 class="text-lg font-black text-white mt-1">Annual Maintenance &amp; SLA</h3>
+              <p class="text-slate-300 mt-1 mb-4">Long-term reliability, security, and dedicated support for your Estate Office.</p>
+              <ul class="space-y-2.5 text-slate-200">
+                <li class="flex items-start gap-2"><i class="fa-solid fa-server text-blue-400 mt-0.5"></i><span><strong>99.5% Uptime Guarantee</strong> with proactive monitoring</span></li>
+                <li class="flex items-start gap-2"><i class="fa-solid fa-database text-emerald-400 mt-0.5"></i><span><strong>Automated Daily Backups</strong> for zero data loss</span></li>
+                <li class="flex items-start gap-2"><i class="fa-solid fa-headset text-amber-400 mt-0.5"></i><span><strong>Priority Support Desk</strong> for billing &amp; staff queries</span></li>
+                <li class="flex items-start gap-2"><i class="fa-solid fa-shield-halved text-rose-400 mt-0.5"></i><span><strong>Quarterly Security &amp; Feature Updates</strong></span></li>
+              </ul>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700">
+              <p class="text-[11px] text-slate-300">Payment Milestones: 40% Kickoff • 30% UAT • 30% Go-Live</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <span>Final commercial pricing is tailored based on hosting preference (Cloud vs. On-Premise) and SMS volume</span>
+          <span class="font-semibold text-emerald-600">Flexible Milestone Terms</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 10: WHY PARTNER WITH US & NEXT STEPS
+      ========================================================== -->
+      <section class="slide-card bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 text-white p-8 sm:p-12 justify-between border border-blue-800/40" data-slide="10" data-title="Why Us &amp; Next Steps">
+        <div class="flex items-center justify-between pb-4 border-b border-white/10">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-500/20 border border-emerald-400/30 px-2.5 py-1 rounded-md">Slide 10 • Partnership &amp; Next Steps</span>
+            <h2 class="text-xl sm:text-2xl font-black text-white mt-1.5">Why Choose This Solution &amp; How We Get Started</h2>
+          </div>
+          <span class="text-xs font-bold text-slate-400">10 / 10</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-4">
+          <!-- Why Choose Us -->
+          <div class="lg:col-span-7 space-y-3">
+            <h3 class="text-sm font-bold text-blue-300 flex items-center gap-2">
+              <i class="fa-solid fa-award"></i> Key Differentiators for Stadium Market Authority
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-4 rounded-2xl bg-white/10 border border-white/15">
+                <p class="font-bold text-emerald-300 mb-1"><i class="fa-solid fa-bullseye mr-1.5"></i>Purpose-Built for Stadiums</p>
+                <p class="text-slate-300">Not a generic ERP—built around 4-block stadium layouts, match-day closures, shutter repairs, and trust deposits.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-white/10 border border-white/15">
+                <p class="font-bold text-blue-300 mb-1"><i class="fa-solid fa-eye mr-1.5"></i>Working Prototype Ready Today</p>
+                <p class="text-slate-300">Your team can inspect every screen, report, and receipt workflow right now before committing to Phase 2.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-white/10 border border-white/15">
+                <p class="font-bold text-amber-300 mb-1"><i class="fa-solid fa-language mr-1.5"></i>Bilingual-Ready Experience</p>
+                <p class="text-slate-300">Native support for Bengali &amp; English administration so field officers and auditors can operate effortlessly.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-white/10 border border-white/15">
+                <p class="font-bold text-pink-300 mb-1"><i class="fa-solid fa-chart-line mr-1.5"></i>Built-In Revenue Intelligence</p>
+                <p class="text-slate-300">Turns daily rent &amp; vacancy data into actionable recommendations to recover lost commercial revenue.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Immediate Next Steps -->
+          <div class="lg:col-span-5 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-emerald-400"></i> Immediate Next Steps
+              </h3>
+              <div class="space-y-3 text-xs">
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center shrink-0">1</span>
+                  <div>
+                    <p class="font-bold text-white">Interactive Walkthrough</p>
+                    <p class="text-slate-300 text-[11px]">Review the live prototype with the Estate Committee &amp; Accounts team.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center shrink-0">2</span>
+                  <div>
+                    <p class="font-bold text-white">Select Package &amp; Finalize Scope</p>
+                    <p class="text-slate-300 text-[11px]">Choose Option A or B and confirm payment/SMS integration preferences.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <span class="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center shrink-0">3</span>
+                  <div>
+                    <p class="font-bold text-white">Kick Off Week 1 Onboarding</p>
+                    <p class="text-slate-300 text-[11px]">Sign agreement and launch the 6-week deployment schedule.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p class="text-sm font-black text-white">Thank You for Your Consideration</p>
+                <p class="text-[11px] text-slate-300">Download this proposal as a PDF for committee review</p>
+              </div>
+              <a href="index.html" class="no-print px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition">
+                Launch Prototype &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
+          <span>National Stadium Market Shop &amp; Tenant E-Management Proposal &copy; 2026</span>
+          <span class="font-mono text-blue-300">Ref: PROP-SM-2026 • Slide 10 / 10</span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Bottom Mobile Navigation Bar -->
+  <div class="no-print sm:hidden sticky bottom-0 z-30 bg-slate-950/95 border-t border-slate-800 px-4 py-2.5 flex items-center justify-between text-white text-xs">
+    <button onclick="prevSlide()" class="px-3 py-1.5 rounded-lg bg-slate-800 font-bold"><i class="fa-solid fa-arrow-left mr-1"></i> Prev</button>
+    <button onclick="setViewMode(currentMode === 'single' ? 'all' : 'single')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-blue-300 font-bold">Toggle View</button>
+    <button onclick="nextSlide()" class="px-3 py-1.5 rounded-lg bg-blue-600 font-bold">Next <i class="fa-solid fa-arrow-right ml-1"></i></button>
+  </div>
+
+  <!-- Shared JS (for showToast etc.) -->
+  <script src="assets/js/common.js"></script>
+  <script>
+    const totalSlides = 10;
+    let currentSlide = 1;
+    let currentMode = 'single'; // 'single' or 'all'
+
+    const slides = Array.from(document.querySelectorAll('.slide-card'));
+    const slideSelector = document.getElementById('slideSelector');
+    const slideCounterBadge = document.getElementById('slideCounterBadge');
+    const presentationProgress = document.getElementById('presentationProgress');
+    const prevSlideBtn = document.getElementById('prevSlideBtn');
+    const nextSlideBtn = document.getElementById('nextSlideBtn');
+
+    function updateSlideUI() {
+      slides.forEach((slide, idx) => {
+        if (idx + 1 === currentSlide) {
+          slide.classList.add('active-slide');
+        } else {
+          slide.classList.remove('active-slide');
+        }
+      });
+
+      if (slideSelector) slideSelector.value = currentSlide;
+      if (slideCounterBadge) slideCounterBadge.textContent = `${currentSlide}/${totalSlides}`;
+      if (presentationProgress) {
+        presentationProgress.style.width = `${(currentSlide / totalSlides) * 100}%`;
+      }
+      if (prevSlideBtn) prevSlideBtn.disabled = currentSlide <= 1;
+      if (nextSlideBtn) nextSlideBtn.disabled = currentSlide >= totalSlides;
+
+      if (currentMode === 'all') {
+        const target = slides[currentSlide - 1];
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function goToSlide(num) {
+      if (num < 1) num = 1;
+      if (num > totalSlides) num = totalSlides;
+      currentSlide = num;
+      updateSlideUI();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    function setViewMode(mode) {
+      currentMode = mode;
+      const btnSingle = document.getElementById('btnModeSingle');
+      const btnAll = document.getElementById('btnModeAll');
+
+      if (mode === 'all') {
+        document.body.classList.remove('mode-single');
+        document.body.classList.add('mode-all');
+        if (btnAll) {
+          btnAll.classList.add('bg-blue-600', 'text-white');
+          btnAll.classList.remove('text-slate-400');
+        }
+        if (btnSingle) {
+          btnSingle.classList.remove('bg-blue-600', 'text-white');
+          btnSingle.classList.add('text-slate-400');
+        }
+      } else {
+        document.body.classList.remove('mode-all');
+        document.body.classList.add('mode-single');
+        if (btnSingle) {
+          btnSingle.classList.add('bg-blue-600', 'text-white');
+          btnSingle.classList.remove('text-slate-400');
+        }
+        if (btnAll) {
+          btnAll.classList.remove('bg-blue-600', 'text-white');
+          btnAll.classList.add('text-slate-400');
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function toggleOverviewDrawer() {
+      const drawer = document.getElementById('slideOverviewDrawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Build Slide Index Drawer Cards
+    function buildOverviewThumbnails() {
+      const grid = document.getElementById('slideThumbGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      slides.forEach((s, index) => {
+        const num = index + 1;
+        const title = s.getAttribute('data-title') || `Slide ${num}`;
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'text-left p-4 rounded-2xl bg-slate-900 border border-slate-700 hover:border-blue-500 hover:bg-slate-800 transition group';
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-blue-600/20 text-blue-300 border border-blue-500/30">Slide ${num < 10 ? '0' + num : num}</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 group-hover:text-blue-400 text-xs"></i>
+          </div>
+          <p class="text-sm font-bold text-white group-hover:text-blue-300 transition">${title}</p>
+        `;
+        card.onclick = () => {
+          setViewMode('single');
+          goToSlide(num);
+          toggleOverviewDrawer();
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+        if (currentMode === 'single') {
+          e.preventDefault();
+          nextSlide();
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        if (currentMode === 'single') {
+          e.preventDefault();
+          prevSlide();
+        }
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    // Build Mini 100-Shop Grid Preview on Slide 3
+    function buildMiniShopGrid() {
+      const container = document.getElementById('miniShopGridPreview');
+      if (!container) return;
+      const vacantIds = [7, 14, 21, 33, 48, 59, 64, 72, 85, 91, 96, 99];
+      const maintIds = [11, 29, 44, 61, 80, 94];
+      const prefixes = ['A', 'B', 'C', 'D'];
+
+      for (let i = 1; i <= 100; i++) {
+        const blockIdx = Math.floor((i - 1) / 25);
+        const shopNum = `${prefixes[blockIdx]}${i % 25 === 0 ? 25 : i % 25}`;
+        let cls = 'bg-emerald-500/85 text-white';
+        if (vacantIds.includes(i)) cls = 'bg-slate-500/80 text-slate-100';
+        else if (maintIds.includes(i)) cls = 'bg-amber-500 text-slate-950 font-bold';
+
+        const cell = document.createElement('div');
+        cell.className = `rounded py-0.5 text-center text-[8px] font-mono ${cls}`;
+        cell.textContent = shopNum;
+        cell.title = `Shop #${prefixes[blockIdx]}-${100 + (i % 25 === 0 ? 25 : i % 25)}`;
+        container.appendChild(cell);
+      }
+    }
+
+    // Initialize Charts inside Slides 3 and 6
+    let presCharts = [];
+    function initPresentationCharts() {
+      if (typeof Chart === 'undefined') return;
+
+      // Slide 3 Chart: Occupancy Doughnut
+      const occCanvas = document.getElementById('presOccupancyChart');
+      if (occCanvas) {
+        presCharts.push(new Chart(occCanvas.getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Occupied (82)', 'Vacant (12)', 'Maintenance (6)'],
+            datasets: [{
+              data: [82, 12, 6],
+              backgroundColor: ['#10b981', '#94a3b8', '#f59e0b'],
+              borderWidth: 2,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 300 },
+            cutout: '64%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { boxWidth: 10, font: { family: "'Inter', sans-serif", size: 10 } }
+              }
+            }
+          }
+        }));
+      }
+
+      // Slide 6 Chart 1: Financial Collection vs Due
+      const finCanvas = document.getElementById('presFinancialChart');
+      if (finCanvas) {
+        presCharts.push(new Chart(finCanvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+            datasets: [
+              { label: 'Collected (৳)', data: [1420000, 1490000, 1450000, 1510000, 1480000, 1245000], backgroundColor: '#10b981', borderRadius: 4 },
+              { label: 'Due (৳)', data: [140000, 70000, 110000, 50000, 80000, 315000], backgroundColor: '#fb7185', borderRadius: 4 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 300 },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { family: "'Inter', sans-serif", size: 10 } } },
+              y: {
+                grid: { color: '#e2e8f0' },
+                ticks: {
+                  font: { family: "'Inter', sans-serif", size: 10 },
+                  callback: (v) => '৳' + (v / 100000).toFixed(1) + 'L'
+                }
+              }
+            },
+            plugins: {
+              legend: { position: 'top', align: 'end', labels: { boxWidth: 10, font: { family: "'Inter', sans-serif", size: 10 } } }
+            }
+          }
+        }));
+      }
+
+      // Slide 6 Chart 2: Block Occupancy Breakdown
+      const vacCanvas = document.getElementById('presVacancyChart');
+      if (vacCanvas) {
+        presCharts.push(new Chart(vacCanvas.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: ['Block A', 'Block B', 'Block C', 'Block D'],
+            datasets: [
+              { label: 'Occupied', data: [23, 21, 18, 20], backgroundColor: '#10b981', borderRadius: 3 },
+              { label: 'Vacant', data: [2, 3, 5, 2], backgroundColor: '#cbd5e1', borderRadius: 3 },
+              { label: 'Repair', data: [0, 1, 2, 3], backgroundColor: '#f59e0b', borderRadius: 3 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 300 },
+            scales: {
+              x: { stacked: true, grid: { display: false }, ticks: { font: { family: "'Inter', sans-serif", size: 10 } } },
+              y: { stacked: true, max: 25, ticks: { font: { size: 10 } } }
+            },
+            plugins: {
+              legend: { position: 'top', align: 'end', labels: { boxWidth: 10, font: { family: "'Inter', sans-serif", size: 10 } } }
+            }
+          }
+        }));
+      }
+    }
+
+    // 1-Click PDF Download via html2pdf.js (with clean print fallback)
+    async function downloadPresentationPDF() {
+      const btn = document.getElementById('downloadPdfBtn');
+      const deck = document.getElementById('presentationDeck');
+      const prevMode = currentMode;
+      const origHtml = btn.innerHTML;
+
+      if (typeof html2pdf === 'undefined') {
+        if (typeof showToast === 'function') {
+          showToast('Offline/blocked mode detected — choose "Save as PDF" in the print dialog.', 'info');
+        }
+        window.print();
+        return;
+      }
+
+      try {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Generating PDF...</span>';
+        if (typeof showToast === 'function') {
+          showToast('Generating 10-slide proposal PDF, please wait...', 'info');
+        }
+
+        document.body.classList.remove('mode-single', 'mode-all');
+        document.body.classList.add('exporting-pdf');
+
+        presCharts.forEach(c => c.resize());
+        await new Promise(r => setTimeout(r, 350));
+
+        const opt = {
+          margin: [4, 4, 4, 4],
+          filename: 'Stadium-Market-Project-Proposal.pdf',
+          image: { type: 'jpeg', quality: 0.96 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            backgroundColor: '#ffffff',
+            windowWidth: 1120
+          },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+          pagebreak: { mode: ['css', 'legacy'] }
+        };
+
+        await html2pdf().set(opt).from(deck).save();
+
+        if (typeof showToast === 'function') {
+          showToast('Stadium-Market-Project-Proposal.pdf downloaded!', 'success');
+        }
+      } catch (err) {
+        console.error('PDF generation fallback:', err);
+        if (typeof showToast === 'function') {
+          showToast('Opening browser print dialog — select "Save as PDF".', 'info');
+        }
+        window.print();
+      } finally {
+        document.body.classList.remove('exporting-pdf');
+        setViewMode(prevMode);
+        updateSlideUI();
+        presCharts.forEach(c => c.resize());
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
+    }
+
+    // Native Vector Print -> PDF
+    function printVectorPDF() {
+      presCharts.forEach(c => c.resize());
+      setTimeout(() => window.print(), 150);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      buildOverviewThumbnails();
+      buildMiniShopGrid();
+      initPresentationCharts();
+      updateSlideUI();
+    });
+  </script>
+</body>
+</html>
