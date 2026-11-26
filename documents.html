@@ -173,7 +173,7 @@
             <h1 class="text-sm sm:text-base font-bold leading-tight text-white">Smart Stadium Shop App — Proposal</h1>
             <span class="hidden md:inline-block text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full">Owner Proposal</span>
           </div>
-          <p class="text-[11px] text-slate-400 hidden sm:block">Simple Automation System for All Stadium Shops (8 Slides)</p>
+          <p class="text-[11px] text-slate-400 hidden sm:block">Simple Automation System for All Stadium Shops (9 Slides)</p>
         </div>
       </div>
 
@@ -184,17 +184,18 @@
         </button>
 
         <select id="slideSelector" onchange="goToSlide(parseInt(this.value))" class="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer px-1">
-          <option value="1" class="bg-slate-900">1. Proposal Cover</option>
-          <option value="2" class="bg-slate-900">2. What You Need &amp; Our Solution</option>
-          <option value="3" class="bg-slate-900">3. Rent Out Shops &amp; Tenant Details</option>
-          <option value="4" class="bg-slate-900">4. Auto Billing &amp; Auto Invoice</option>
-          <option value="5" class="bg-slate-900">5. Utility Bills (Elec, Water, Gas)</option>
-          <option value="6" class="bg-slate-900">6. Live Observation &amp; Shop History</option>
-          <option value="7" class="bg-slate-900">7. Lease Compliance &amp; Alerts</option>
-          <option value="8" class="bg-slate-900">8. Thank You</option>
+          <option value="1" class="bg-slate-900">1. Welcome (B2M)</option>
+          <option value="2" class="bg-slate-900">2. Proposal Cover</option>
+          <option value="3" class="bg-slate-900">3. What You Need &amp; Our Solution</option>
+          <option value="4" class="bg-slate-900">4. Rent Out Shops &amp; Tenant Details</option>
+          <option value="5" class="bg-slate-900">5. Auto Billing &amp; Auto Invoice</option>
+          <option value="6" class="bg-slate-900">6. Utility Bills (Elec, Water, Gas)</option>
+          <option value="7" class="bg-slate-900">7. Live Observation &amp; Shop History</option>
+          <option value="8" class="bg-slate-900">8. Lease Compliance &amp; Alerts</option>
+          <option value="9" class="bg-slate-900">9. Thank You</option>
         </select>
 
-        <span id="slideCounterBadge" class="text-[11px] font-mono bg-slate-800 text-blue-300 px-2 py-0.5 rounded-md">1/8</span>
+        <span id="slideCounterBadge" class="text-[11px] font-mono bg-slate-800 text-blue-300 px-2 py-0.5 rounded-md">1/9</span>
 
         <button onclick="nextSlide()" id="nextSlideBtn" class="p-1.5 px-2.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white disabled:opacity-30 transition text-xs font-semibold" title="Next Slide (Right Arrow)">
           <i class="fa-solid fa-chevron-right"></i>
@@ -245,7 +246,7 @@
 
     <!-- Top Progress Bar -->
     <div class="w-full h-1 bg-slate-800 mt-2.5 rounded-full overflow-hidden">
-      <div id="presentationProgress" class="h-full bg-gradient-to-r from-blue-500 via-indigo-400 to-emerald-400 transition-all duration-300" style="width: 12.5%;"></div>
+      <div id="presentationProgress" class="h-full bg-gradient-to-r from-blue-500 via-indigo-400 to-emerald-400 transition-all duration-300" style="width: 11.11%;"></div>
     </div>
   </header>
 
@@ -261,7 +262,7 @@
           <i class="fa-solid fa-xmark mr-1"></i> Close
         </button>
       </div>
-      <div id="slideThumbGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+      <div id="slideThumbGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
   </div>
 
@@ -270,9 +271,51 @@
     <div id="presentationDeck" class="w-full max-w-[1120px]">
 
       <!-- =========================================================
-           SLIDE 1: PROPOSAL COVER
+           SLIDE 1: WELCOME SLIDE (B2M TECHNOLOGIES LTD.)
       ========================================================== -->
-      <section class="slide-card active-slide bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-10 sm:p-12 justify-between border border-blue-800/40" data-slide="1" data-title="Proposal Cover">
+      <section class="slide-card active-slide bg-gradient-to-br from-slate-900 via-blue-950 to-slate-950 text-white p-10 sm:p-12 justify-between border border-blue-800/40" data-slide="1" data-title="Welcome (B2M Technologies Ltd.)">
+        <div class="flex items-center justify-between text-xs text-slate-300">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 font-semibold text-white">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            Presented By B2M Technologies Ltd.
+          </div>
+          <span class="font-mono bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">November 2026</span>
+        </div>
+
+        <div class="my-auto text-center max-w-3xl mx-auto py-6">
+          <!-- B2M Logo Card -->
+          <div class="inline-flex items-center justify-center bg-white px-7 py-5 rounded-3xl shadow-2xl border border-white/80 mb-7">
+            <img src="logo.jpg" alt="B2M Technologies Ltd. Logo" class="h-24 sm:h-28 w-auto object-contain">
+          </div>
+
+          <p class="text-xs sm:text-sm font-bold uppercase tracking-widest text-blue-300 mb-2">
+            Warm Greetings To Mr. Mahbub Morshed Sohel
+          </p>
+          <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
+            Welcome!
+          </h2>
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed mb-8">
+            On behalf of <strong class="text-white">B2M Technologies Ltd.</strong>, we are pleased to present a simple, modern automation proposal for managing all shops across your stadium—covering shop renting, automated billing, utility tracking, and real-time owner observation.
+          </p>
+
+          <div class="no-print flex items-center justify-center">
+            <button onclick="nextSlide()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/30 transition flex items-center gap-2">
+              <span>Start Proposal Presentation</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-5 border-t border-white/15 flex items-center justify-between text-xs text-slate-300">
+          <span>B2M Technologies Ltd. • Digital Automation Partner</span>
+          <span class="font-bold text-white bg-white/10 px-2.5 py-1 rounded-lg">Slide 01 / 09</span>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SLIDE 2: PROPOSAL COVER
+      ========================================================== -->
+      <section class="slide-card bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-10 sm:p-12 justify-between border border-blue-800/40" data-slide="2" data-title="Proposal Cover">
         <div class="flex items-center justify-between">
           <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
@@ -324,20 +367,20 @@
 
         <div class="pt-5 border-t border-white/15 flex items-center justify-between text-xs text-slate-300">
           <span>Simple • Automated • Complete Control for the Stadium Owner</span>
-          <span class="font-bold text-white bg-white/10 px-2.5 py-1 rounded-lg">Slide 01 / 08</span>
+          <span class="font-bold text-white bg-white/10 px-2.5 py-1 rounded-lg">Slide 02 / 09</span>
         </div>
       </section>
 
       <!-- =========================================================
-           SLIDE 2: WHAT YOU NEED & OUR SIMPLE SOLUTION
+           SLIDE 3: WHAT YOU NEED & OUR SIMPLE SOLUTION
       ========================================================== -->
-      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="2" data-title="What You Need &amp; Our Solution">
+      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="3" data-title="What You Need &amp; Our Solution">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 02 • Overview</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 03 • Overview</span>
             <h2 class="text-2xl font-black text-slate-900 mt-1.5">Why Manage Everything Through One Automated App?</h2>
           </div>
-          <span class="text-xs font-bold text-slate-400">02 / 08</span>
+          <span class="text-xs font-bold text-slate-400">03 / 09</span>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-auto py-4">
@@ -399,15 +442,15 @@
       </section>
 
       <!-- =========================================================
-           SLIDE 3: RENT OUT SHOPS & DIGITAL TENANT DETAILS
+           SLIDE 4: RENT OUT SHOPS & DIGITAL TENANT DETAILS
       ========================================================== -->
-      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="3" data-title="Rent Out Shops &amp; Tenant Details">
+      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="4" data-title="Rent Out Shops &amp; Tenant Details">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Slide 03 • Renting &amp; Digital Tenants</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Slide 04 • Renting &amp; Digital Tenants</span>
             <h2 class="text-2xl font-black text-slate-900 mt-1.5">Rent Out Shops Easily &amp; Keep Digital Tenant Details</h2>
           </div>
-          <span class="text-xs font-bold text-slate-400">03 / 08</span>
+          <span class="text-xs font-bold text-slate-400">04 / 09</span>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto py-4">
@@ -475,15 +518,15 @@
       </section>
 
       <!-- =========================================================
-           SLIDE 4: AUTOMATED BILLING & AUTO INVOICE
+           SLIDE 5: AUTOMATED BILLING & AUTO INVOICE
       ========================================================== -->
-      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="4" data-title="Auto Billing &amp; Auto Invoice">
+      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="5" data-title="Auto Billing &amp; Auto Invoice">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Slide 04 • Rent Collection</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Slide 05 • Rent Collection</span>
             <h2 class="text-2xl font-black text-slate-900 mt-1.5">Automated Monthly Billing &amp; 1-Click Auto Invoice</h2>
           </div>
-          <span class="text-xs font-bold text-slate-400">04 / 08</span>
+          <span class="text-xs font-bold text-slate-400">05 / 09</span>
         </div>
 
         <div class="my-auto py-4 space-y-6">
@@ -536,15 +579,15 @@
       </section>
 
       <!-- =========================================================
-           SLIDE 5: UTILITY MONITORING (ELECTRICITY, WATER & GAS)
+           SLIDE 6: UTILITY MONITORING (ELECTRICITY, WATER & GAS)
       ========================================================== -->
-      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="5" data-title="Utility Bills (Elec, Water, Gas)">
+      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="6" data-title="Utility Bills (Elec, Water, Gas)">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">Slide 05 • Utility Monitoring</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">Slide 06 • Utility Monitoring</span>
             <h2 class="text-2xl font-black text-slate-900 mt-1.5">Electricity, Water &amp; Gas Bill Automation</h2>
           </div>
-          <span class="text-xs font-bold text-slate-400">05 / 08</span>
+          <span class="text-xs font-bold text-slate-400">06 / 09</span>
         </div>
 
         <div class="my-auto py-4 space-y-6">
@@ -597,15 +640,15 @@
       </section>
 
       <!-- =========================================================
-           SLIDE 6: LIVE OBSERVATION & TOTAL SHOP HISTORY
+           SLIDE 7: LIVE OBSERVATION & TOTAL SHOP HISTORY
       ========================================================== -->
-      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="6" data-title="Live Observation &amp; Shop History">
+      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="7" data-title="Live Observation &amp; Shop History">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 06 • Owner Observation</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Slide 07 • Owner Observation</span>
             <h2 class="text-2xl font-black text-slate-900 mt-1.5">Live Observation — Paid vs. Due Shops &amp; Total Shop History</h2>
           </div>
-          <span class="text-xs font-bold text-slate-400">06 / 08</span>
+          <span class="text-xs font-bold text-slate-400">07 / 09</span>
         </div>
 
         <div class="my-auto py-3 space-y-5">
@@ -664,15 +707,15 @@
       </section>
 
       <!-- =========================================================
-           SLIDE 7: LEASE COMPLIANCE & AUTOMATED ALERTS
+           SLIDE 8: LEASE COMPLIANCE & AUTOMATED ALERTS
       ========================================================== -->
-      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="7" data-title="Lease Compliance &amp; Alerts">
+      <section class="slide-card bg-white text-slate-800 p-10 justify-between border border-slate-200" data-slide="8" data-title="Lease Compliance &amp; Alerts">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100">
           <div>
-            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Slide 07 • Lease Compliance</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Slide 08 • Lease Compliance</span>
             <h2 class="text-2xl font-black text-slate-900 mt-1.5">Lease Compliance, Expiry Alerts &amp; Notices</h2>
           </div>
-          <span class="text-xs font-bold text-slate-400">07 / 08</span>
+          <span class="text-xs font-bold text-slate-400">08 / 09</span>
         </div>
 
         <div class="my-auto py-4 space-y-5">
@@ -722,12 +765,12 @@
       </section>
 
       <!-- =========================================================
-           SLIDE 8: THANK YOU PAGE
+           SLIDE 9: THANK YOU PAGE
       ========================================================== -->
-      <section class="slide-card bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-10 sm:p-12 justify-between border border-blue-800/40" data-slide="8" data-title="Thank You">
+      <section class="slide-card bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-10 sm:p-12 justify-between border border-blue-800/40" data-slide="9" data-title="Thank You">
         <div class="flex items-center justify-between text-xs text-slate-300">
           <span class="px-3 py-1 rounded-full bg-white/10 border border-white/15 font-semibold">Smart Stadium Shop Management App</span>
-          <span class="font-mono">Slide 08 / 08</span>
+          <span class="font-mono">Slide 09 / 09</span>
         </div>
 
         <div class="my-auto text-center max-w-2xl mx-auto py-6">
@@ -769,7 +812,7 @@
         </div>
 
         <div class="pt-4 border-t border-white/15 flex items-center justify-between text-xs text-slate-300">
-          <span>Stadium Shop &amp; Tenant Automation Proposal &copy; 2026</span>
+          <span>B2M Technologies Ltd. • Stadium Shop Automation Proposal &copy; 2026</span>
           <span class="text-blue-300 font-semibold">We Look Forward to Working With You</span>
         </div>
       </section>
@@ -787,7 +830,7 @@
   <!-- Shared JS -->
   <script src="assets/js/common.js"></script>
   <script>
-    const totalSlides = 8;
+    const totalSlides = 9;
     let currentSlide = 1;
     let currentMode = 'single';
 
@@ -978,7 +1021,7 @@
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Creating PDF...</span>';
         if (typeof showToast === 'function') {
-          showToast('Creating 8-page PDF (1 slide per page), please wait...', 'info');
+          showToast('Creating 9-page PDF (1 slide per page), please wait...', 'info');
         }
 
         document.body.classList.remove('mode-single', 'mode-all');
